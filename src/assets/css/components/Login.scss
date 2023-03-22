@@ -1,0 +1,23 @@
+.login{
+	&__wrapper{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+	}
+	&__image{
+		background-size: cover;
+		background-image: url('./../../../images/programmer.png');
+		min-width: 33%;
+		height: 100%;
+	}
+	&__welcome{
+		flex: 1 1 auto;
+	}
+	&__button--wrap{
+		max-width: 200px;
+		display: inline-block;
+	}
+
+}
