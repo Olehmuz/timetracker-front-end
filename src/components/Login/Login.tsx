@@ -1,4 +1,4 @@
-import { CredentialResponse, GoogleLogin, TokenResponse, useGoogleLogin } from '@react-oauth/google';
+import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 
@@ -27,7 +27,8 @@ const Login = () => {
 				<GoogleLogin
 					onSuccess={(credentialResponse: CredentialResponse) => {
 						if(credentialResponse.credential)
-						console.log(jwtDecode(credentialResponse.credential));
+							console.log(jwtDecode(credentialResponse.credential));
+						axios.get('http://localhost:3000/').then((res) => console.log(res.data)).catch(e => console.log(e))
 					}}
 					// onSuccess={() => login()}
 						// credentialResponse => {
