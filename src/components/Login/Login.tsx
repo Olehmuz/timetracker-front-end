@@ -1,22 +1,28 @@
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
-import jwtDecode from 'jwt-decode';
+import React from 'react';
+import jwtDecode, { JwtPayload } from 'jwt-decode';
+import { useAppDispatch } from '../../hooks/index';
+import { login } from 'utils/redux/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from 'hooks/useAuth';
 
-
+interface GoogleDataFromJWT extends JwtPayload {
+	email: string;
+	family_name: string;
+	given_name: string;
+	picture: string;
+	sub: string;
+}
 
 const Login = () => {
-	// async function handleGoogleLoginSuccess(tokenResponse: TokenResponse) {
-	// 	const accessToken = tokenResponse.access_token;
-	// 	console.log(accessToken)
-	// 	const userInfo = await axios
-    //     .get('https://www.googleapis.com/oauth2/v3/userinfo', {
-    //       headers: { Authorization: `Bearer ${accessToken}` },
-    //     })
-    //     .then(res => res.data);
-
-    //   console.log(userInfo);
-	// }
-	// const login = useGoogleLogin({onSuccess: handleGoogleLoginSuccess});
+	const { isAuth } = useAuth();
+	const nav = useNavigate();
+	React.useEffect(() => {
+		if(isAuth) {
+			nav('/');
+		}
+	}, [isAuth, nav])
+	const dispatch = useAppDispatch();
 	return (
 	<section className='login__wrapper'>
 		<div className='login__image'></div>
@@ -25,32 +31,23 @@ const Login = () => {
 			<h2>Sign in to your account</h2>
 			<div className='login__button--wrap'>
 				<GoogleLogin
-					onSuccess={(credentialResponse: CredentialResponse) => {
-						if(credentialResponse.credential)
-							console.log(jwtDecode(credentialResponse.credential));
-						axios.get('http://localhost:3000/').then((res) => console.log(res.data)).catch(e => console.log(e))
+					onSuccess={async (credentialResponse: CredentialResponse) => {
+						if(credentialResponse.credential){
+							const user = jwtDecode<GoogleDataFromJWT>(credentialResponse.credential);
+							dispatch(login({
+								googleId: user.sub,
+								email: user.email,
+								picture: user.picture,
+								name: user.given_name,
+								surname: user.family_name
+							}))
+							nav('/');
+						}
 					}}
-					// onSuccess={() => login()}
-						// credentialResponse => {
-						// if(credentialResponse.credential){
-						// 	fetch('http://localhost:3000/auth/google')
-							// fetch('http://localhost:3000/auth/google/callback', {
-							// 	method: 'POST',
-							// 	body: JSON.stringify(credentialResponse),
-							// 	headers: {
-							// 		'Content-Type': 'application/json'
-							// 	}
-							// })
-
-							// console.log(credentialResponse)
-							// console.log(jwtDecode(credentialResponse.credential));
-						
-						
 					
 					onError={() => {
 						console.log('Login Failed');
 					}}
-					useOneTap
 				/>
 			</div>
 			
