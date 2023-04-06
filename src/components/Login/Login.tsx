@@ -26,29 +26,31 @@ const Login = () => {
 	return (
 	<section className='login__wrapper'>
 		<div className='login__image'></div>
-		<div className='login__welcome'>
-			<h1>Welcome to Keenethics</h1>
-			<h2>Sign in to your account</h2>
-			<div className='login__button--wrap'>
-				<GoogleLogin
-					onSuccess={async (credentialResponse: CredentialResponse) => {
-						if(credentialResponse.credential){
-							const user = jwtDecode<GoogleDataFromJWT>(credentialResponse.credential);
-							dispatch(login({
-								googleId: user.sub,
-								email: user.email,
-								picture: user.picture,
-								name: user.given_name,
-								surname: user.family_name
-							}))
-							nav('/');
-						}
-					}}
-					
-					onError={() => {
-						console.log('Login Failed');
-					}}
-				/>
+		<div className='login__welcome flex flex-col items-center'>
+			<div className='text-left'>
+				<h1 className='font-medium text-3xl text-left mb-2 font-primary-gray'>Welcome to Keenethics</h1>
+				<h2 className='text-base text-left mb-3 font-primary-gray'>Sign in to your account</h2>
+				<div className='login__button--wrap'>
+					<GoogleLogin
+						onSuccess={async (credentialResponse: CredentialResponse) => {
+							if(credentialResponse.credential){
+								const user = jwtDecode<GoogleDataFromJWT>(credentialResponse.credential);
+								dispatch(login({
+									googleId: user.sub,
+									email: user.email,
+									picture: user.picture,
+									name: user.given_name,
+									surname: user.family_name
+								}))
+								nav('/');
+							}
+						}}
+						
+						onError={() => {
+							console.log('Login Failed');
+						}}
+					/>
+				</div>
 			</div>
 			
 		</div>

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Login } from './components';
-import { observer } from 'mobx-react-lite';
 import { useAppDispatch } from 'hooks';
 import { checkAuth } from 'utils/redux/slices/authSlice';
 import { Route, Routes } from 'react-router-dom';
@@ -10,8 +9,10 @@ import './App.css';
 import './assets/css/index.scss'
 import './assets/css/main.scss'
 
-import Homepage from 'components/Homepage/Homepage';
 import PrivateRoute from './utils/routes/privateRoutes';
+import Header from 'components/Header/Header';
+import Layout from 'pages/Layout';
+import Homepage from 'components/Homepage/Homepage';
 
 
 function App() {
@@ -25,11 +26,11 @@ function App() {
 	return (
 		<Routes>
 			<Route element={<PrivateRoute />}>
-				<Route path="/" element={<Homepage />} />
+				<Route path="/" element={<Header />} />
 			</Route>
 			<Route path="login" element={<Login />} />
 		</Routes>
 	);
 }
 
-export default observer(App);
+export default App;

@@ -1,9 +1,10 @@
 import { AuthUser } from 'models/user/User.model';
-import React, { useState } from 'react'
+import Layout from 'pages/Layout';
+import React from 'react'
 import { UserService } from 'services/UserService';
 
 function Homepage() {
-	const [users, setUsers] = useState<AuthUser[]>([]);
+	const [users, setUsers] = React.useState<AuthUser[]>([]);
 	const getUsers = async () => {
 		try {
 			const res = await UserService.getUsers();
@@ -24,6 +25,9 @@ function Homepage() {
 					})
 				}
 			</div>
+
+
+			<div className=''>hello</div>
    		</>
 	);
 }
