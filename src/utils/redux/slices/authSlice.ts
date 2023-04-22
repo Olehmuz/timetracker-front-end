@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { AuthResponse } from "models/response/AuthResponse";
@@ -49,15 +49,6 @@ export const authSlice = createSlice({
 	name: "auth",
 	initialState,
 	reducers: {
-		setUser: (state, action: PayloadAction<AuthUser>) => {
-			state.user = action.payload;
-		},
-		setAuth: (state, action: PayloadAction<boolean>) => {
-			state.isAuth = action.payload;
-		},
-		setLoading: (state, action: PayloadAction<boolean>) => {
-			state.isLoading = action.payload;
-		},
 		logout: (state) => {
 			localStorage.removeItem("refreshToken");
 			localStorage.removeItem("token");
@@ -92,6 +83,6 @@ export const authSlice = createSlice({
 	}
 });
 
-export const { setUser, setAuth, setLoading, logout } = authSlice.actions;
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;

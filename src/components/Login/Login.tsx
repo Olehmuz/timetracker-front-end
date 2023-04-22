@@ -24,7 +24,7 @@ const Login = () => {
 	}, [isAuth, nav])
 	const dispatch = useAppDispatch();
 	return (
-	<section className='login__wrapper'>
+	<section className='login__wrapper bg-white'>
 		<div className='login__image'></div>
 		<div className='login__welcome flex flex-col items-center'>
 			<div className='text-left'>

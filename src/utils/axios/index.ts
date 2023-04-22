@@ -2,6 +2,7 @@ import axios from "axios";
 import { AuthResponse } from "models/response/AuthResponse";
 
 export const API_URL = 'https://itfin-back.azurewebsites.net'
+// export const API_URL = 'http://127.0.0.1:3000';
 
 const $api = axios.create({
 	baseURL: API_URL,
@@ -23,6 +24,7 @@ $api.interceptors.request.use((config) => {
 					'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`
 				}
 			});
+			localStorage.setItem('refreshToken', res.data.refresh_token);
 			localStorage.setItem('token', res.data.access_token);
 			return $api.request(originalRequest);
 		} catch (e) {

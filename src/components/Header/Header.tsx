@@ -1,35 +1,26 @@
+import classNames from 'classnames';
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Link, useLocation } from 'react-router-dom'
-import './../../App.css';
+import { Link } from 'react-router-dom'
+
 import { useAuth } from 'hooks/useAuth';
 import { useAppDispatch } from '../../hooks/index';
+
 import { logout } from 'utils/redux/slices/authSlice';
 
+import 'react-calendar/dist/Calendar.css';
+import './../../assets/css/components/Calendar.scss'
+
 const navigation = [
-  { name: 'My tracker', href: '/homepage', current: true },
-  { name: 'Crew', href: '#', current: false },
+  { name: 'My tracker', href: '/', current: false },
+  { name: 'Crew', href: '/crew', current: false },
 ]
-
-
-const classNames = (...classes: string[]) => {
-  return classes.filter(Boolean).join(' ')
-}
-
-
 
 export default function Header() {
 	const { user } = useAuth();
-	const nav = useLocation();
+
 	const dispatch = useAppDispatch()
-	console.log(nav.pathname)
-	navigation.map(el => {
-		if(el.href === nav.pathname){
-			return el.current = true;
-		}
-		return el.current = false;
-	})
 
 	const logoutHeader = () => {
 		dispatch(logout());
@@ -38,23 +29,24 @@ export default function Header() {
 
 	const userNavigation = [
 		{ name: 'Your Profile', href: '/profile', },
-	  ]
+	]
+	  
   return (
-    <>
-      <div className="min-h-full">
         <Disclosure as="nav" className="bg-white-800">
           {({ open }) => (
             <>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
-                    <div className="flex-shrink-0 ">
+                    <Link to='/about'>
+					<div className="flex-shrink-0 ">
                       <img
                         className="h-8"
                         src="/keen.png"
                         alt="Your Company"
                       />
                     </div>
+					</Link>
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                         {navigation.map((item) => (
@@ -207,10 +199,6 @@ export default function Header() {
             </>
           )}
         </Disclosure>
-        <main>
-          <div className="text-primary-gray mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 text-center">To be continue...</div>
-        </main>
-      </div>
-    </>
+
   )
 }
