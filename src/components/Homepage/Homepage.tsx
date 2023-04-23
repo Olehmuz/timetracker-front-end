@@ -1,23 +1,23 @@
-import { useAuth } from 'hooks/useAuth';
-import { AuthUser } from 'models/user/User.model';
 import React from 'react'
+
 import Calendar from 'react-calendar';
-import { UserService } from 'services/UserService';
+
+import { useAuth } from 'hooks/useAuth';
 import { $api } from 'utils/axios';
 
 function Homepage() {
 	const { user } = useAuth()
-	const [users, setUsers] = React.useState<AuthUser[]>([]);
-	const getUsers = async () => {
-		try {
-			const res = await UserService.getUsers();
-			setUsers(res.data);
-		} catch (e) {
-			if(e instanceof Error){
-				console.log(e.message);
-			}
-		}
-	}
+	// const [users, setUsers] = React.useState<AuthUser[]>([]);
+	// const getUsers = async () => {
+	// 	try {
+	// 		const res = await UserService.getUsers();
+	// 		setUsers(res.data);
+	// 	} catch (e) {
+	// 		if(e instanceof Error){
+	// 			console.log(e.message);
+	// 		}
+	// 	}
+	// }
 
 	const [value, onChange] = React.useState<Date | null | (Date | null)[]>(new Date());
 	if(value instanceof Date) {
@@ -46,14 +46,14 @@ function Homepage() {
 			value={value as Date} 
 		   />
 		   <button onClick={setTrackedTime}>Set</button>
-			<button onClick={getUsers}>getUsers</button>
+			{/* <button onClick={getUsers}>getUsers</button>
 			<div>
 				{
 					users.length > 0 && users.map((user) => {
 						return <div key={user.email}>{user.email}</div>
 					})
 				}
-			</div>
+			</div> */}
 
 
 			<div className=''>hello</div>
