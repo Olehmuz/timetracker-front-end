@@ -9,11 +9,11 @@ import './assets/css/index.scss'
 import './assets/css/main.scss'
 
 import PrivateRoute from './utils/routes/privateRoutes';
-import Layout from 'pages/Layout';
-import Homepage from 'components/Homepage/Homepage';
 
-import { useAuth } from 'hooks/useAuth';
-import AboutCreator from 'pages/AboutCreator';
+import Tracker from 'pages/Tracker/Tracker';
+import Layout from 'pages/Layout/Layout';
+import AboutCreator from 'pages/AboutCreator/AboutCreator';
+
 import { Crew } from 'pages/Crew/Crew';
 
 
@@ -24,8 +24,7 @@ function App() {
 			dispatch(checkAuth())
 		}
 	}, [dispatch])
-	const isAuth = useAuth();
-	console.log(isAuth);
+
 	return (
 		<Routes>
 			<Route element={<PrivateRoute />}>
@@ -33,7 +32,7 @@ function App() {
 					<Route path="/about" element={<AboutCreator />} />
 					<Route path="/profile" element={<Profile />} />
 					<Route path="/crew" element={<Crew />} />
-					<Route path="/" element={<Homepage />} />
+					<Route path="/" element={<Tracker />} />
 				</Route>
 			</Route>
 			<Route path="login" element={<Login />} />

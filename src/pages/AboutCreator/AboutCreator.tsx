@@ -2,13 +2,13 @@
 function AboutCreator() {
 	
 	return (
-		<div className="container mx-auto">
+		<section>
 			<h1 className="mt-5 text-2xl text-center">About project</h1>
 			<div className="pb-3 pt-4 flex">
                   <div className="flex items-center flex-col rounded-lg p-4 bg-white border border-secondary basis-1/4 m-2">
                     <div className="flex items-center">
 						<div className="flex-shrink-0">
-						<img className="h-20 w-20 rounded-full" src={require('./../images/me.jpg')} alt="" />
+						<img className="h-20 w-20 rounded-full" src={require('./../../images/me.jpg')} alt="" />
 						</div>
 						<div className="ml-3">
 							<div className="text-base font-medium leading-none pb-2">Creator:</div>
@@ -25,7 +25,7 @@ function AboutCreator() {
 							<div className="text-sm font-medium leading-none pb-2 text-gray-400">System for managing an IT company</div>
 						</div>
 						<div className="flex-shrink-0">
-							<img className="h-20 rounded-full" src={require('./../images/itfin.png')} alt="" />
+							<img className="h-20 rounded-full" src={require('./../../images/itfin.png')} alt="" />
 						</div>
 					</div>
                   </div>
@@ -37,7 +37,7 @@ function AboutCreator() {
 					</div>
                   </div>
             </div>
-		</div>
+		</section>
 	);
 }
 

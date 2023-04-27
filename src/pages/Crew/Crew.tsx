@@ -18,7 +18,7 @@ export const Crew: React.FC = () => {
 	}, []);
 
   return (
-	<div className='container mx-auto'>
+	<section>
 		<h3 className='text-gray mb-3'>Crew</h3>
 		<div className='rounded-lg bg-white border border-secondary max-w-4xl overflow-hidden'>
 			{users.length ? users.map(el => {
@@ -26,6 +26,6 @@ export const Crew: React.FC = () => {
 			}) : 
 			<div className='flex w-full items-center py-2 px-3 hover:bg-[#fafafa] cursor-pointer'>Loading</div>}
 		</div>	
-	</div>
+	</section>
   )
 }
