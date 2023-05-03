@@ -5,11 +5,12 @@ import { $api } from 'utils/axios'
 import moment from 'moment'
 
 export interface EmployeeCardProps {
-	activeDate: Date | (Date | null)[] | null
+	activeDate: Date | (Date | null)[] | null;
+	getTrackedTimeByDay: () => Promise<void>;
 }
 
 
-export const EmployeeCard:React.FC<EmployeeCardProps> = ({activeDate}) => {
+export const EmployeeCard:React.FC<EmployeeCardProps> = ({activeDate, getTrackedTimeByDay}) => {
 	const { user } = useAuth()
 	const [trackedTimeByMonth, updateTrackedTimeByMonth] = React.useState(0);
 	const getTrackedTimeByMonth = async () => {
@@ -24,7 +25,7 @@ export const EmployeeCard:React.FC<EmployeeCardProps> = ({activeDate}) => {
 				trackedTime: 8
 			})
 			updateTrackedTimeByMonth(res.data)
-			console.log(res.data);
+			getTrackedTimeByDay()
 		} catch (e) {
 			if(e instanceof Error){
 				throw new Error(e.message);
@@ -37,13 +38,12 @@ export const EmployeeCard:React.FC<EmployeeCardProps> = ({activeDate}) => {
 				throw new Error('Not a date.')
 			}
 			const formatedDate = moment(activeDate).format().split('+')[0] + 'Z'
-			const res = await $api.post(`/tracker`,{
+			await $api.post(`/tracker`,{
 				userId: user.id,
 				date: formatedDate,
 				trackedTime: 8
 			})
 			getTrackedTimeByMonth()
-			// console.log(res.data);
 		} catch (e) {
 			if(e instanceof Error){
 				throw new Error(e.message);

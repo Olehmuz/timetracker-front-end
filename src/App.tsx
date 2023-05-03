@@ -24,7 +24,7 @@ function App() {
 			dispatch(checkAuth())
 		}
 	}, [dispatch])
-
+	
 	return (
 		<Routes>
 			<Route element={<PrivateRoute />}>
