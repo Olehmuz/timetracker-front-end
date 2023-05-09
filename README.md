@@ -44,3 +44,12 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+LAB 3: Оптимізація проекту(виніс в Redux)
+       Чумак Ілля
+       https://github.com/illiachumak/chatFrontEnd
+       https://github.com/illiachumak/chatBackEnd
+LAB 3 Pull Request:
+https://github.com/Olehmuz/timetracker-front-end/pull/1
+
+
