@@ -1,49 +1,24 @@
 import React from 'react'
 
 import { useAuth } from 'hooks/useAuth'
-import { $api } from 'utils/axios'
-import moment from 'moment'
 
-export interface EmployeeCardProps {
-	activeDate: Date | (Date | null)[] | null;
-	getTrackedTimeByDay: () => Promise<void>;
-}
+import { useAppDispatch, useAppSelector } from 'hooks'
+import { getTrackedTimeByDay, getTrackedTimeByMonth } from 'utils/redux/slices/trackerSlice'
+import { TrackerService } from 'services/TrackerService'
 
 
-export const EmployeeCard:React.FC<EmployeeCardProps> = ({activeDate, getTrackedTimeByDay}) => {
+
+export const EmployeeCard:React.FC = () => {
 	const { user } = useAuth()
-	const [trackedTimeByMonth, updateTrackedTimeByMonth] = React.useState(0);
-	const getTrackedTimeByMonth = async () => {
-		try {
-			if(!(activeDate instanceof Date)){
-				throw new Error('Not a date.')
-			}
-			const formatedDate = moment(activeDate).format().split('+')[0] + 'Z'
-			const res = await $api.post<number>(`/tracker/month`,{
-				userId: user.id,
-				date: formatedDate,
-				trackedTime: 8
-			})
-			updateTrackedTimeByMonth(res.data)
-			getTrackedTimeByDay()
-		} catch (e) {
-			if(e instanceof Error){
-				throw new Error(e.message);
-			}
-		}
-	}
+	const dispatch = useAppDispatch()
+	const { activeDate, timeByMonth } = useAppSelector(state => state.tracker)
+	
 	const setTrackedTime = async () => {
 		try {
-			if(!(activeDate instanceof Date)){
-				throw new Error('Not a date.')
-			}
-			const formatedDate = moment(activeDate).format().split('+')[0] + 'Z'
-			await $api.post(`/tracker`,{
-				userId: user.id,
-				date: formatedDate,
-				trackedTime: 8
-			})
-			getTrackedTimeByMonth()
+			await TrackerService.setTrackedTime(user.id, activeDate);
+
+			dispatch(getTrackedTimeByMonth({userId: user.id, activeDate}));
+			dispatch(getTrackedTimeByDay({userId: user.id, activeDate}));
 		} catch (e) {
 			if(e instanceof Error){
 				throw new Error(e.message);
@@ -52,9 +27,8 @@ export const EmployeeCard:React.FC<EmployeeCardProps> = ({activeDate, getTracked
 	}
 
 	React.useEffect(() => {
-		getTrackedTimeByMonth()
-	})
-	console.log(activeDate)
+		dispatch(getTrackedTimeByMonth({userId: user.id, activeDate}));
+	}, [activeDate, dispatch, user.id])
 	return (
 		<div className='min-w-[300px] ml-3 flex-col flex justify-center rounded-lg p-4 bg-white border border-secondary'>
 			<button className='w-full mb-3 bg-[#dfe1e6] border px-3 py-1.5 border-[#dfe1e6] hover:bg-[#e4e6ea] rounded-lg' onClick={setTrackedTime}>Track time</button>
@@ -76,7 +50,7 @@ export const EmployeeCard:React.FC<EmployeeCardProps> = ({activeDate, getTracked
 
 			<h6 className='text-gray font-medium mb-2'>MONTHLY LIMIT</h6>
 			<div className='flex justify-between'>
-				<div>Tracked time:</div><div>{trackedTimeByMonth}h / 160h</div>
+				<div>Tracked time:</div><div>{timeByMonth}h / 160h</div>
 			</div>
 		</div>
 		

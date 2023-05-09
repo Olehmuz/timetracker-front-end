@@ -1,71 +1,108 @@
-export {}
-// import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-// import { useAuth } from "hooks/useAuth";
-// import moment from "moment";
-// import { $api } from "utils/axios";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import moment from "moment";
+import { TrackerService } from "services/TrackerService";
 
 
 
-// interface AuthState {
-// 	activeDate: Date | (Date | null)[] | null;
-// 	timeByDay: number;
-// 	isLoading: boolean;
-// }
+interface TrackerState {
+	activeDate: string;
+	timeByDay: number;
+	timeByMonth: number;
+	isLoading: boolean;
+}
 
-// const initialState: AuthState = {
-// 	activeDate: null,
-// 	timeByDay: 0,
-// 	isLoading: false
-// };
+const initialState: TrackerState = {
+	activeDate: moment(new Date()).format().split('+')[0] + 'Z',
+	timeByDay: 0,
+	timeByMonth: 0,
+	isLoading: false
+};
+export interface TrackerRequest {
+	userId: string;
+	activeDate: string;
+}
+export const getTrackedTimeByDay = createAsyncThunk(
+	"tracker/day",
+	async ({ userId, activeDate }: TrackerRequest) => {
+		try {
+			const res = await TrackerService.getTrackedTimeByDay(userId, activeDate);
+			return res.data;
+		} catch (e) {
+			if (e instanceof Error) {
+				throw new Error(e.message);
+			}
+		}
+	}
+);
 
-// export const getTrackedTimeByDay = createAsyncThunk(
-// 	"tracker/day",
-// 	async () => {
-// 		try {
-// 			if (!(activeDate instanceof Date)) {
-// 				throw new Error('Not a date.')
-// 			}
-// 			const formatedDate = moment(activeDate).format().split('+')[0] + 'Z'
+export const getTrackedTimeByMonth = createAsyncThunk(
+	"tracker/month",
+	async ({ userId, activeDate }: TrackerRequest) => {
+		try {
+			const res = await TrackerService.getTimeByMonth(userId, activeDate);
+			return res.data;
+		} catch (e) {
+			if (e instanceof Error) {
+				throw new Error(e.message);
+			}
+		}
+	}
+);
 
-// 			const res = await $api.post<number>(`/tracker/day`, {
-// 				userId: user.id,
-// 				date: formatedDate,
-// 			})
-// 			updateTrackedTimeByDay(res.data)
-// 			console.log(res.data);
-// 		} catch (e) {
-// 			if (e instanceof Error) {
-// 				throw new Error(e.message);
-// 			}
+// const getTrackedTimeByMonth = async () => {
+// 	try {
+// 		const res = await $api.post<number>(`/tracker/month`,{
+// 			userId: user.id,
+// 			date: activeDate,
+// 			trackedTime: 8
+// 		})
+// 		updateTrackedTimeByMonth(res.data)
+// 		// dispatch(getTrackedTimeByDay(activeDate))
+// 	} catch (e) {
+// 		if(e instanceof Error){
+// 			throw new Error(e.message);
 // 		}
 // 	}
-// );
+// }
 
 
+export const trackerSlice = createSlice({
+	name: "tracker",
+	initialState,
+	reducers: {
+		changeActiveDate(state, action: PayloadAction<string>) {
+			state.activeDate = action.payload;
+		}
+	},
+	extraReducers: (builder) => {
+		builder
+			.addCase(getTrackedTimeByDay.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getTrackedTimeByDay.fulfilled, (state, action) => {
+				if (typeof action.payload === 'number') {
+					state.timeByDay = action.payload;
+				}
+				state.isLoading = false;
+			})
+			.addCase(getTrackedTimeByDay.rejected, (state) => {
+				state.isLoading = false;
+			})
+			.addCase(getTrackedTimeByMonth.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getTrackedTimeByMonth.fulfilled, (state, action) => {
+				if (typeof action.payload === 'number') {
+					state.timeByMonth = action.payload;
+				}
+				state.isLoading = false;
+			})
+			.addCase(getTrackedTimeByMonth.rejected, (state) => {
+				state.isLoading = false;
+			})
+	}
+});
 
+export const { changeActiveDate } = trackerSlice.actions;
 
-// export const authSlice = createSlice({
-// 	name: "auth",
-// 	initialState,
-// 	reducers: {
-
-// 	},
-// 	extraReducers: (builder) => {
-// 		builder
-// 			.addCase(login.pending, (state) => {
-// 				state.isLoading = true;
-// 			})
-// 			.addCase(login.fulfilled, (state, action) => {
-// 				state.user = action.payload;
-// 				state.isAuth = true;
-// 				state.isLoading = false;
-// 			})
-// 			.addCase(login.rejected, (state) => {
-// 				state.isLoading = false;
-// 			})
-// 	}
-// });
-
-// export const { logout } = authSlice.actions;
-
-// export default authSlice.reducer;
+export default trackerSlice.reducer;
