@@ -45,6 +45,11 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-
+LAB 3: Оптимізація проекту(виніс в Redux)
+       Чумак Ілля
+       https://github.com/illiachumak/chatFrontEnd
+       https://github.com/illiachumak/chatBackEnd
 LAB 3 Pull Request:
 https://github.com/Olehmuz/timetracker-front-end/pull/1
+
+
