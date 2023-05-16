@@ -40,7 +40,7 @@ const Login = () => {
 									email: user.email,
 									picture: user.picture,
 									name: user.given_name,
-									surname: user.family_name
+									surname: user.family_name,
 								}))
 								nav('/');
 							}

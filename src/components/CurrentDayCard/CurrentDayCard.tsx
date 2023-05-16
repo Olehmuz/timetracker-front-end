@@ -18,16 +18,12 @@ export const CurrentDayCard:React.FC = () => {
 	}, [activeDate, dispatch, user.id])
 	
 	return (
-		<div className='min-w-[300px] ml-3 flex-col flex justify-center rounded-lg p-4 bg-white border border-secondary'>
+		<div className='min-w-[300px] mt-2 flex-col flex justify-center rounded-lg p-4 bg-white border border-secondary'>
 			<div className='flex justify-between'>
 				<div>{timeByDay > 0 ? 'Tracked!' : 'Untracked!'}</div><div className={classNames('rounded-full w-[20px] h-[20px]', timeByDay > 0 ? 'bg-green-600' : 'bg-red-600')}></div>
 			</div>
 			<div className='flex justify-between'>
 				<div>📅 Selected date:</div><div>{new Date(activeDate).toLocaleDateString()}</div>
-			</div>
-
-			<div className='flex justify-between'>
-				<div>🗄️ Project name:</div><div>OneReach-2</div>
 			</div>
 
 			<hr />

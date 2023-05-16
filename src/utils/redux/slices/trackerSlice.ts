@@ -7,6 +7,7 @@ import { TrackerService } from "services/TrackerService";
 interface TrackerState {
 	activeDate: string;
 	timeByDay: number;
+	timeByWeek: number;
 	timeByMonth: number;
 	isLoading: boolean;
 }
@@ -14,6 +15,7 @@ interface TrackerState {
 const initialState: TrackerState = {
 	activeDate: moment(new Date()).format().split('+')[0] + 'Z',
 	timeByDay: 0,
+	timeByWeek: 0,
 	timeByMonth: 0,
 	isLoading: false
 };
@@ -26,6 +28,20 @@ export const getTrackedTimeByDay = createAsyncThunk(
 	async ({ userId, activeDate }: TrackerRequest) => {
 		try {
 			const res = await TrackerService.getTrackedTimeByDay(userId, activeDate);
+			return res.data;
+		} catch (e) {
+			if (e instanceof Error) {
+				throw new Error(e.message);
+			}
+		}
+	}
+);
+
+export const getTrackedTimeByWeek = createAsyncThunk(
+	"tracker/week",
+	async ({ userId, activeDate }: TrackerRequest) => {
+		try {
+			const res = await TrackerService.getTrackedTimeByWeek(userId, activeDate);
 			return res.data;
 		} catch (e) {
 			if (e instanceof Error) {
@@ -48,22 +64,6 @@ export const getTrackedTimeByMonth = createAsyncThunk(
 		}
 	}
 );
-
-// const getTrackedTimeByMonth = async () => {
-// 	try {
-// 		const res = await $api.post<number>(`/tracker/month`,{
-// 			userId: user.id,
-// 			date: activeDate,
-// 			trackedTime: 8
-// 		})
-// 		updateTrackedTimeByMonth(res.data)
-// 		// dispatch(getTrackedTimeByDay(activeDate))
-// 	} catch (e) {
-// 		if(e instanceof Error){
-// 			throw new Error(e.message);
-// 		}
-// 	}
-// }
 
 
 export const trackerSlice = createSlice({
@@ -98,6 +98,18 @@ export const trackerSlice = createSlice({
 				state.isLoading = false;
 			})
 			.addCase(getTrackedTimeByMonth.rejected, (state) => {
+				state.isLoading = false;
+			})
+			.addCase(getTrackedTimeByWeek.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(getTrackedTimeByWeek.fulfilled, (state, action) => {
+				if (typeof action.payload === 'number') {
+					state.timeByWeek = action.payload;
+				}
+				state.isLoading = false;
+			})
+			.addCase(getTrackedTimeByWeek.rejected, (state) => {
 				state.isLoading = false;
 			})
 	}

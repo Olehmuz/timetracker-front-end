@@ -24,7 +24,6 @@ export default function Header() {
 
 	const logoutHeader = () => {
 		dispatch(logout());
-		console.log('logout');
 	}
 
 	const userNavigation = [
@@ -41,8 +40,8 @@ export default function Header() {
                     <Link to='/about'>
 					<div className="flex-shrink-0 ">
                       <img
-                        className="h-8"
-                        src="/keen.png"
+                        className="h-4 px-8"
+                        src="/logo.png"
                         alt="Your Company"
                       />
                     </div>
