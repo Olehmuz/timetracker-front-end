@@ -3,6 +3,7 @@ import { useAuth } from "hooks/useAuth";
 const Profile = () => {
 	const { user } = useAuth();
 	console.log(user)
+	
 	return (
 		<section className="mt-[25px] rounded-lg bg-white border border-secondary w-full overflow-hidden">
 			<h1 className="p-4 text-2xl text-primary-gray font-bold">{user.name} {user.surname}</h1>

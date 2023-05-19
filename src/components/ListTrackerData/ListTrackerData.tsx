@@ -2,8 +2,10 @@ import { useAppSelector } from 'hooks'
 import { useAuth } from 'hooks/useAuth'
 import { ITrackerModel } from 'models/tracker/Tracker.model'
 import moment from 'moment'
+import 'moment-timezone';
 import React from 'react'
 import { TrackerService } from 'services/TrackerService'
+
 moment.updateLocale('en', {
 	week: {
 		dow: 1,
@@ -12,7 +14,11 @@ moment.updateLocale('en', {
 const ListTrackerData = () => {
 	const { user } = useAuth()
 	const { activeDate } = useAppSelector(state => state.tracker);
-	const monday = moment(activeDate).startOf('week').toISOString();
+
+	
+
+	const monday = moment.utc(activeDate).startOf('week').toISOString();
+
 	const [workingDays, setWorkingDays] = React.useState<ITrackerModel[]>([]);
 	
 	React.useEffect(() => {

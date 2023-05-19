@@ -13,7 +13,7 @@ interface TrackerState {
 }
 
 const initialState: TrackerState = {
-	activeDate: moment(new Date()).format().split('+')[0] + 'Z',
+	activeDate: moment(new Date()).format().split('T')[0] + 'T00:00:00Z',
 	timeByDay: 0,
 	timeByWeek: 0,
 	timeByMonth: 0,

@@ -14,7 +14,7 @@ export const EmployeeCard:React.FC = () => {
 	const { user } = useAuth()
 	const dispatch = useAppDispatch()
 	const { activeDate, timeByMonth, timeByWeek } = useAppSelector(state => state.tracker)
-
+	
 	const [errorMessage, setError] = React.useState<string>('');
 	const setTrackedTime = async () => {
 		try {
