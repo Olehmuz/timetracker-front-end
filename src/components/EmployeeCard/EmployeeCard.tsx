@@ -7,6 +7,7 @@ import { getTrackedTimeByDay, getTrackedTimeByMonth, getTrackedTimeByWeek } from
 import { TrackerService } from 'services/TrackerService'
 import { AxiosError } from 'axios'
 import moment from 'moment'
+import { ProjectService } from 'services/ProjectService'
 
 export interface IRequestError{message: string; code: undefined | number}
 
@@ -15,10 +16,12 @@ export const EmployeeCard:React.FC = () => {
 	const dispatch = useAppDispatch()
 	const { activeDate, timeByMonth, timeByWeek } = useAppSelector(state => state.tracker)
 	
+	const [activeProject, setActiveProject] = React.useState<string>();
 	const [errorMessage, setError] = React.useState<string>('');
 	const setTrackedTime = async () => {
 		try {
 			await TrackerService.setTrackedTime(user.id, activeDate);
+			
 			dispatch(getTrackedTimeByMonth({userId: user.id, activeDate}));
 			dispatch(getTrackedTimeByWeek({userId: user.id, activeDate}));
 			dispatch(getTrackedTimeByDay({userId: user.id, activeDate}));
@@ -36,6 +39,7 @@ export const EmployeeCard:React.FC = () => {
 
 
 	React.useEffect(() => {
+		ProjectService.getActiveProjectByUserId(user.id).then(res => setActiveProject(res.data.projectName));
 		dispatch(getTrackedTimeByMonth({userId: user.id, activeDate}));
 		dispatch(getTrackedTimeByWeek({userId: user.id, activeDate}));
 		TrackerService.getLimitOfWorkingHoursByWeek(user.id, activeDate).then(res => setLimit(res.data))
@@ -63,7 +67,7 @@ export const EmployeeCard:React.FC = () => {
 
 				<h6 className='text-gray font-medium'>WEEKLY LIMIT</h6>
 				<div className='flex justify-between mb-2'>
-					<div>OneReach-2</div><div>{timeByWeek}h / {limit}h</div>
+					<div>{activeProject}</div><div>{timeByWeek}h / {limit}h</div>
 				</div>
 
 				<h6 className='text-gray font-medium mb-2'>MONTHLY LIMIT</h6>
