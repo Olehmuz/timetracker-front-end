@@ -4,6 +4,7 @@ import { getTrackedTimeByDay } from '../../utils/redux/slices/trackerSlice';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { useAuth } from 'hooks/useAuth';
 import classNames from 'classnames';
+import { ProjectService } from 'services/ProjectService';
 
 
 
@@ -12,6 +13,12 @@ export const CurrentDayCard:React.FC = () => {
 	
 	const { activeDate, timeByDay } = useAppSelector(state => state.tracker)
 	const { user } = useAuth()
+
+	const [activeProject, setActiveProject] = React.useState<string>();
+
+	React.useEffect(() => {
+		ProjectService.getActiveProjectByUserId(user.id).then(res => setActiveProject(res.data.projectName));
+	}, [user.id])
 
 	React.useEffect(() => {
 		dispatch(getTrackedTimeByDay({userId: user.id, activeDate}))
@@ -31,7 +38,7 @@ export const CurrentDayCard:React.FC = () => {
 			<h6 className='text-gray font-medium'>DAY LIMIT</h6>
 			
 			<div className='flex justify-between mb-2'>
-				<div>OneReach-2</div><div>{timeByDay}h / 8h</div>
+				<div>{activeProject}</div><div>{timeByDay}h / 8h</div>
 			</div>
 
 		</div>

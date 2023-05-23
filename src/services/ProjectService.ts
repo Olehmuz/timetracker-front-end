@@ -6,4 +6,8 @@ export class ProjectService {
 	static async getActiveProjectByUserId(userId: string): Promise<AxiosResponse<IProjectModel>> {
 		return await $api.get<IProjectModel>(`/management/getActiveProject/${userId}`);
 	}
+
+	static async getAllProjects(): Promise<AxiosResponse<IProjectModel[]>> {
+		return await $api.get<IProjectModel[]>(`/management/projects`);
+	}
 }
