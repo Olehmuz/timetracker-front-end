@@ -2,19 +2,20 @@ import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import classNames from 'classnames'
-import { ProjectService } from 'services/ProjectService'
-import { IProjectModel } from 'models/project/Project.model'
+
 import React from 'react'
 import { useAuth } from 'hooks/useAuth'
 import { $api } from 'utils/axios';
+import { PositionService } from 'services/PositionService'
+import { IPositionModel } from 'models/project/Position.model'
 
-const ProjectList = () => {
-	const [projects, setProject] = useState<IProjectModel[]>([]);
+const PositionList = () => {
+	const [positions, setposition] = useState<IPositionModel[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [activeProject, setActiveProject] = React.useState<IProjectModel>({
+	const [activePoition, setActivePosition] = React.useState<IPositionModel>({
 		"_id": 'id',
-		"projectName": 'Bench',
-		"projectDescription": 'description',
+		"positionName": 'Bench',
+		"positionDescription": 'description',
 		"salary": {
 			"junior": 300,
 			"middle": 400,
@@ -26,23 +27,23 @@ const ProjectList = () => {
 	
 	React.useEffect(() => {
 		setIsLoading(true);
-		const getProjects = ProjectService.getAllProjects().then(res => {
-			setProject(res.data)
+		const getPositions = PositionService.getAllPositions().then(res => {
+			setposition(res.data)
 		})
-		const getActiveProject = ProjectService.getActiveProjectByUserId(user.id).then(res => setActiveProject(res.data));
-		Promise.all([getProjects, getActiveProject]).then(() => setIsLoading(false))
+		const getActivePosition = PositionService.getActivePositionByUserId(user.id).then(res => setActivePosition(res.data));
+		Promise.all([getPositions, getActivePosition]).then(() => setIsLoading(false))
 	}, [user.id])
 
 	if(isLoading){
 		return <div>Loading...</div>;
 	}
-
+	
 	return (
-		<Listbox value={activeProject} onChange={(e) => {
-			setActiveProject(e);
-			$api.post('/management/setActiveProject', {
+		<Listbox value={activePoition} onChange={(e) => {
+			setActivePosition(e);
+			$api.post('/management/setActivePosition', {
 				userId: user.id,
-				projectId: e._id
+				positionId: e._id
 			})
 		}}>
 		{({ open }) => (
@@ -50,7 +51,7 @@ const ProjectList = () => {
 			<div className="relative mt-2">
 				<Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
 				<span className="flex items-center">
-					<span className="block truncate">{activeProject.projectName}</span>
+					<span className="block truncate">{activePoition.positionName}</span>
 				</span>
 				<span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
 					<ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -65,28 +66,28 @@ const ProjectList = () => {
 				leaveTo="opacity-0"
 				>
 				<Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-					{projects && projects.map((project) => (
+					{positions && positions.map((position) => (
 					<Listbox.Option
-						key={project._id}
+						key={position._id}
 						className={({ active }) =>
 						classNames(
 							active ? 'bg-indigo-600 text-white' : 'text-gray-900',
 							'relative cursor-default select-none py-2 pl-3 pr-9'
 						)
 						}
-						value={project}
+						value={position}
 					>
-						{({ active }) => (
+						{({ selected, active }) => (
 						<>
 							<div className="flex items-center">
 							<span
-								className={classNames(project.projectName === activeProject.projectName ? 'font-semibold' : 'font-normal', 'block truncate')}
+								className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}
 							>
-								{project.projectName}
+								{position.positionName}
 							</span>
 							</div>
 
-							{project.projectName === activeProject.projectName ? (
+							{selected ? (
 							<span
 								className={classNames(
 								active ? 'text-white' : 'text-indigo-600',
@@ -109,4 +110,4 @@ const ProjectList = () => {
 	)
 }
 
-export default ProjectList;
+export default PositionList;

@@ -95,7 +95,7 @@ export default function Header() {
                                   <Link
                                     to={item.href}
                                     className={classNames(
-                                      active ? 'hover:bg-gray-100' : '',
+                                      active ? 'hover:bg-[#F3F4F6]' : '',
                                       'block px-4 py-2 text-sm text-primary-gray'
                                     )}
                                   >
@@ -109,8 +109,8 @@ export default function Header() {
                                   <div
 									onClick={logoutHeader}
                                     className={classNames(
-                                      active ? 'hover:bg-gray-100' : '',
-                                      'block px-4 py-2 text-sm text-primary-gray'
+                                      active ? 'hover:bg-[#F3F4F6]' : '',
+                                      'block px-4 py-2 text-sm text-primary-gray cursor-pointer'
                                     )}
                                   >
 									Sign out

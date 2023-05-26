@@ -1,8 +1,8 @@
 import axios from "axios";
 import { AuthResponse } from "models/response/AuthResponse";
 
-// export const API_URL = 'https://itfin-back.azurewebsites.net'
-export const API_URL = 'http://127.0.0.1:3000';
+export const API_URL = 'https://itfin-back.azurewebsites.net'
+// export const API_URL = 'http://127.0.0.1:3000';
 
 const $api = axios.create({
 	baseURL: API_URL,
