@@ -8,6 +8,7 @@ import { TrackerService } from 'services/TrackerService'
 import { AxiosError } from 'axios'
 import moment from 'moment'
 import { ProjectService } from 'services/ProjectService'
+import { PayslipService } from 'services/PayslipService'
 
 export interface IRequestError{message: string; code: undefined | number}
 
@@ -15,7 +16,7 @@ export const EmployeeCard:React.FC = () => {
 	const { user } = useAuth()
 	const dispatch = useAppDispatch()
 	const { activeDate, timeByMonth, timeByWeek } = useAppSelector(state => state.tracker)
-	
+	const [rate, setRate] = React.useState<number>(3600)
 	const [activeProject, setActiveProject] = React.useState<string>();
 	const [errorMessage, setError] = React.useState<string>('');
 	const setTrackedTime = async () => {
@@ -39,6 +40,7 @@ export const EmployeeCard:React.FC = () => {
 
 
 	React.useEffect(() => {
+		PayslipService.getMontlyRate(user.id).then(({data}) => setRate(data))
 		ProjectService.getActiveProjectByUserId(user.id).then(res => setActiveProject(res.data.projectName));
 		dispatch(getTrackedTimeByMonth({userId: user.id, activeDate}));
 		dispatch(getTrackedTimeByWeek({userId: user.id, activeDate}));
@@ -60,7 +62,7 @@ export const EmployeeCard:React.FC = () => {
 				</div>
 
 				<div className='flex justify-between'>
-					<div>💸 Salary</div><div>3600$</div>
+					<div>💸 Salary</div><div>{rate}$</div>
 				</div>
 
 				<hr />

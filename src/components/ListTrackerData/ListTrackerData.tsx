@@ -34,7 +34,7 @@ const ListTrackerData = () => {
 		{date: new Date('2023-05-27T00:00:00.000Z'), userId: '', trackedTime: 0},
 		{date: new Date('2023-05-28T00:00:00.000Z'), userId: '', trackedTime: 0}
 	]);
-	console.log(workingDays)
+
 	React.useEffect(() => {
 		setIsLoading(true)
 		TrackerService.getWorkingDays(user.id, monday).then(res => setWorkingDays(res.data)).finally(() => setIsLoading(false))
