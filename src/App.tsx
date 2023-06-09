@@ -17,7 +17,6 @@ import AboutCreator from 'pages/AboutCreator/AboutCreator';
 import { Crew } from 'pages/Crew/Crew';
 import Project from 'pages/Project/Project';
 import Cats from 'components/Cats/Cats';
-import { useAuth } from 'hooks/useAuth';
 
 
 function App() {
