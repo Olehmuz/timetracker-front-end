@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 function AboutCreator() {
 	
@@ -5,7 +6,7 @@ function AboutCreator() {
 		<section>
 			<h1 className="mt-5 text-2xl text-center">About project</h1>
 			<div className="pb-3 pt-4 flex">
-                  <div className="flex items-center flex-col rounded-lg p-4 bg-white border border-secondary basis-1/4 m-2">
+                  <Link to='/cats' className="flex items-center flex-col rounded-lg p-4 bg-white border border-secondary basis-1/4 m-2">
                     <div className="flex items-center">
 						<div className="flex-shrink-0">
 						<img className="h-20 w-20 rounded-full" src={require('./../../images/me.jpg')} alt="" />
@@ -16,7 +17,7 @@ function AboutCreator() {
 						<div className="text-sm font-medium leading-none text-gray-400">olehmuz87@gmal.com</div>
 						</div>
 					</div>
-                  </div>
+                  </Link>
 
 				  <div className="flex items-start flex-col rounded-lg p-4 bg-white border border-secondary basis-1/2 m-2">
                     <div className="flex items-center w-full justify-evenly">

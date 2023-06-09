@@ -15,17 +15,21 @@ export interface IRequestError{message: string; code: undefined | number}
 export const EmployeeCard:React.FC = () => {
 	const { user } = useAuth()
 	const dispatch = useAppDispatch()
+	const [isDisabled, setDisabled] = React.useState(false)
 	const { activeDate, timeByMonth, timeByWeek } = useAppSelector(state => state.tracker)
 	const [rate, setRate] = React.useState<number>(3600)
+	const [vacationDays, setVacationDays] = React.useState<number>(0)
 	const [activeProject, setActiveProject] = React.useState<string>();
 	const [errorMessage, setError] = React.useState<string>('');
 	const setTrackedTime = async () => {
 		try {
+			setDisabled(true)
 			await TrackerService.setTrackedTime(user.id, activeDate);
-			
 			dispatch(getTrackedTimeByMonth({userId: user.id, activeDate}));
 			dispatch(getTrackedTimeByWeek({userId: user.id, activeDate}));
 			dispatch(getTrackedTimeByDay({userId: user.id, activeDate}));
+			PayslipService.getVacationDays(user.id).then(({data}) => setVacationDays(data))
+			setDisabled(false)
 		} catch (e) {
 			console.log(e)
 			if(e instanceof AxiosError){
@@ -41,6 +45,7 @@ export const EmployeeCard:React.FC = () => {
 
 	React.useEffect(() => {
 		PayslipService.getMontlyRate(user.id).then(({data}) => setRate(data))
+		PayslipService.getVacationDays(user.id).then(({data}) => setVacationDays(data))
 		ProjectService.getActiveProjectByUserId(user.id).then(res => setActiveProject(res.data.projectName));
 		dispatch(getTrackedTimeByMonth({userId: user.id, activeDate}));
 		dispatch(getTrackedTimeByWeek({userId: user.id, activeDate}));
@@ -55,10 +60,10 @@ export const EmployeeCard:React.FC = () => {
 				<p className="ml-6">{errorMessage}. Check it out!</p>
 			</div>}
 			<div className='min-w-[300px] mt-2 flex-col flex justify-center rounded-lg p-4 bg-white border border-secondary'>
-				{(moment(activeDate).isoWeekday() === 6 || moment(activeDate).isoWeekday() === 7) ? <button disabled className='w-full mb-3 bg-[#dfe1e6] border px-3 py-1.5 border-[#dfe1e6] rounded-lg'>Weekdaayy!</button> : <button className='w-full mb-3 bg-[#dfe1e6] border px-3 py-1.5 border-[#dfe1e6] hover:bg-[#e4e6ea] rounded-lg' {...moment(activeDate).isoWeekday() === 6 || moment(activeDate).isoWeekday() === 7? {disabled: true} : {} } onClick={setTrackedTime}>Track time</button>}
+				{(moment(activeDate).isoWeekday() === 6 || moment(activeDate).isoWeekday() === 7) ? <button disabled className='w-full mb-3 bg-[#dfe1e6] border px-3 py-1.5 border-[#dfe1e6] rounded-lg'>Weekdaayy!</button> : <button className='w-full mb-3 bg-[#dfe1e6] border px-3 py-1.5 border-[#dfe1e6] hover:bg-[#e4e6ea] rounded-lg' {...((moment(activeDate).isoWeekday() === 6 || moment(activeDate).isoWeekday() === 7) || isDisabled) ? {disabled: true} : {} } onClick={setTrackedTime}>Track time</button>}
 
 				<div className='flex justify-between'>
-					<div>🏝 Vacation days</div><div>15.8</div>
+					<div>🏝 Vacation days</div><div>{vacationDays}</div>
 				</div>
 
 				<div className='flex justify-between'>
