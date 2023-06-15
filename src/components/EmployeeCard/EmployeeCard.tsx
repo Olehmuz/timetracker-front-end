@@ -63,7 +63,7 @@ export const EmployeeCard:React.FC = () => {
 				{(moment(activeDate).isoWeekday() === 6 || moment(activeDate).isoWeekday() === 7) ? <button disabled className='w-full mb-3 bg-[#dfe1e6] border px-3 py-1.5 border-[#dfe1e6] rounded-lg'>Weekdaayy!</button> : <button className='w-full mb-3 bg-[#dfe1e6] border px-3 py-1.5 border-[#dfe1e6] hover:bg-[#e4e6ea] rounded-lg' {...((moment(activeDate).isoWeekday() === 6 || moment(activeDate).isoWeekday() === 7) || isDisabled) ? {disabled: true} : {} } onClick={setTrackedTime}>Track time</button>}
 
 				<div className='flex justify-between'>
-					<div>🏝 Vacation days</div><div>{vacationDays}</div>
+					<div>🏝 Vacation days</div><div>{vacationDays.toFixed(2)}</div>
 				</div>
 
 				<div className='flex justify-between'>
